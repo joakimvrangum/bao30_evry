@@ -18,11 +18,21 @@
 						"type": "RelationalSource",
 						"query": "select * from `bank_customer`"
 					},
+					"sink": {
+						"type": "SqlSink",
+						"writeBatchSize": 10000
+					},
 					"enableStaging": false
 				},
 				"inputs": [
 					{
 						"referenceName": "RelationalTable1",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "OutputSqlDataset",
 						"type": "DatasetReference"
 					}
 				]
