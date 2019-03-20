@@ -22,7 +22,14 @@
 						"type": "SqlSink",
 						"writeBatchSize": 10000
 					},
-					"enableStaging": false
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"columnMappings": {
+							"CustomerId": "id",
+							"Geography": "geography"
+						}
+					}
 				},
 				"inputs": [
 					{
