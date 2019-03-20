@@ -5,6 +5,19 @@
 			"referenceName": "AzureSqlDatabaseLinkedService",
 			"type": "LinkedServiceReference"
 		},
-		"type": "AzureSqlTable"
+		"type": "AzureSqlTable",
+		"structure": [
+			{
+				"name": "id",
+				"type": "Int32"
+			},
+			{
+				"name": "geography",
+				"type": "String"
+			}
+		],
+		"typeProperties": {
+			"tableName": "[dbo].[test]"
+		}
 	}
 }
