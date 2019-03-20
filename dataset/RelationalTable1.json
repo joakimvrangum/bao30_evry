@@ -1,0 +1,13 @@
+{
+	"name": "RelationalTable1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "linkedService1",
+			"type": "LinkedServiceReference"
+		},
+		"type": "RelationalTable",
+		"typeProperties": {
+			"tableName": "`bank_customer`"
+		}
+	}
+}
