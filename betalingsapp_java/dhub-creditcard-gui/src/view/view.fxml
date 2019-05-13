@@ -29,7 +29,6 @@
    <children>
       <AnchorPane prefHeight="512.0" prefWidth="750.0">
          <children>
-            <Button fx:id="btnX" mnemonicParsing="false" onAction="#handleCloseWindowButton" prefHeight="16.0" prefWidth="15.0" text="x" />
             <HBox alignment="TOP_CENTER" layoutX="-4.0" layoutY="-8.0" prefHeight="41.0" prefWidth="758.0">
                <children>
                   <Region prefHeight="41.0" prefWidth="726.0" />
