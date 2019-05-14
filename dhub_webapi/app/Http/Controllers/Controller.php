@@ -30,11 +30,12 @@ class Controller extends BaseController
         $validator = Validator::make($request->input(),
             [
                 'cardNr'            => 'required',
-                'transactionAmount' => 'required',
+                'transactionAmount' => 'required|numeric',
             ],
             [
                 'cardNr.required'	            =>	'Avvist! Mangler kortnummer',
                 'transactionAmount.required'	=>	'Avvist! Mangler beløp for å trekke.',
+                'transactionAmount.numeric'	    =>	'Avvist! Beløpet du ønsker å trekke er ikke numerisk.',
             ]);
 
         if (!$validator->passes()) {
@@ -62,7 +63,7 @@ class Controller extends BaseController
         $card->account->SALDO_VAL -= $request->transactionAmount;
         $card->push();
 
-        return "TRANS_OK";
+        return "Betaling OK! Transaksjonen var vellykket.";
     }
 
 }

@@ -23,7 +23,7 @@ public class Main {
         String[] card = parseCreditCardData(card_data, true);
 
         try {
-            dHubHttpHandler.dHubTransactionPOST(card[0], pris, varetekst);
+            dHubHttpHandler.dHubTransactionPOST(card[1], pris, varetekst);
         } catch (IOException e) {
             e.printStackTrace();
         }

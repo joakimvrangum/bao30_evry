@@ -12,5 +12,3 @@
 */
 
 Route::get('/', 'Controller@index');
-Route::get('/transaction/card', 'Controller@newCardTransaction');
-Route::post('/transaction/card', 'Controller@newCardTransaction');

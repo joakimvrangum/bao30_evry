@@ -48,8 +48,7 @@ public class Controller implements Initializable {
         Stage stage = (Stage) grid.getScene().getWindow();
         stage.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             if(key.getCode()== KeyCode.ENTER) {
-                card = new String[0];
-                card = parseCreditCardData(bufferCard.toString(), true);
+                String[] card = parseCreditCardData(bufferCard.toString(), true);
                 updateStatusLabel(LABEL_STATUS.IN_PROGRESS, "Kort lest - sender til server (dHub)");
                 try {
                     String response = dHubTransactionPOST(card[1], Double.parseDouble(textfieldPrice.getText()), textfieldTransactionText.getText());
@@ -84,12 +83,6 @@ public class Controller implements Initializable {
                 break;
         }
         labelStatus.setText(status_text);
-    }
-
-    public void handleCloseWindowButton() {
-        System.out.println("Lukk");
-        Stage stage = (Stage) grid.getScene().getWindow();
-        stage.close();
     }
 
 }
