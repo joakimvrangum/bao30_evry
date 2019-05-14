@@ -10,7 +10,6 @@ public class MagneticCardHandler {
                 System.out.println(card_array[i]);
             }
         }
-        card_array=new String[0];
         return card_array;
     }
 }

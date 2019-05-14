@@ -1,5 +1,8 @@
 package view;
 
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -20,54 +23,57 @@ import static view.handlers.dHubHttpHandler.dHubTransactionPOST;
 
 public class Controller implements Initializable {
 
-    @FXML TextArea output;
     @FXML TextField textfieldPrice, textfieldTransactionText;
-    @FXML Button btnPay;
+    @FXML Button btnPay, btnX;
     @FXML GridPane grid;
     @FXML Label labelStatus;
 
-    private final StringBuffer bufferCard = new StringBuffer();
-    String[] card;
     private enum LABEL_STATUS {
         OK,
         IN_PROGRESS,
         ERROR
     }
 
+    private Stage stage;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
     }
 
-    public void handleBtnBetale() {
-        textfieldPrice.setDisable(true);
-        textfieldTransactionText.setDisable(true);
-        btnPay.setDisable(true);
-        bufferCard.delete(0,bufferCard.length());
-        updateStatusLabel(LABEL_STATUS.OK, "Klar til betaling - dra bankkortet.");
-        Stage stage = (Stage) grid.getScene().getWindow();
-        stage.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
-            if(key.getCode()== KeyCode.ENTER) {
-                String[] card = parseCreditCardData(bufferCard.toString(), true);
-                updateStatusLabel(LABEL_STATUS.IN_PROGRESS, "Kort lest - sender til server (dHub)");
-                try {
-                    String response = dHubTransactionPOST(card[1], Double.parseDouble(textfieldPrice.getText()), textfieldTransactionText.getText());
-                    if (response.startsWith("Avvist!")) {
-                        updateStatusLabel(LABEL_STATUS.ERROR, response);
-                    } else {
-                        updateStatusLabel(LABEL_STATUS.OK, response);
+    @FXML
+    public void handleBtnBetale(ActionEvent event) {
+        StringBuffer bufferCard = new StringBuffer();
+        disableUI();
+        updateStatusLabel(LABEL_STATUS.IN_PROGRESS, "Klar til betaling - dra bankkortet.");
+        stage = (Stage) grid.getScene().getWindow();
+
+        EventHandler eventCardRead = new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent ke) {
+                if(ke.getCode()== KeyCode.ENTER) {
+                    System.out.println(bufferCard.toString());
+                    String[] card = parseCreditCardData(bufferCard.toString(), false);
+                    updateStatusLabel(LABEL_STATUS.IN_PROGRESS, "Kort lest - sender til server (dHub)");
+                    try {
+                        String response = dHubTransactionPOST(card[1], Double.parseDouble(textfieldPrice.getText()), textfieldTransactionText.getText());
+                        if (response.startsWith("Avvist!")) {
+                            updateStatusLabel(LABEL_STATUS.ERROR, response);
+                        } else {
+                            updateStatusLabel(LABEL_STATUS.OK, response);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        updateStatusLabel(LABEL_STATUS.ERROR, e.getMessage());
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    updateStatusLabel(LABEL_STATUS.ERROR, e.getMessage());
-                }
-                textfieldPrice.setDisable(false);
-                textfieldTransactionText.setDisable(false);
-                btnPay.setDisable(false);
-                bufferCard.delete(0,bufferCard.length());
-            }
-            bufferCard.append(key.getText());
-        });
+                    enableUI();
+                    stage.removeEventHandler(KeyEvent.KEY_PRESSED, this);
+                } else
+                    bufferCard.append(ke.getText());
+            };
+        };
+
+        stage.addEventHandler(KeyEvent.KEY_PRESSED, eventCardRead);
     }
 
     public void updateStatusLabel(LABEL_STATUS status_code, String status_text) {
@@ -76,13 +82,33 @@ public class Controller implements Initializable {
                 labelStatus.setStyle("-fx-text-fill: greenyellow");
                 break;
             case IN_PROGRESS:
-                labelStatus.setStyle("-fx-text-fill: coral");
+                labelStatus.setStyle("-fx-text-fill: yellow");
                 break;
             case ERROR:
                 labelStatus.setStyle("-fx-text-fill: firebrick");
                 break;
         }
         labelStatus.setText(status_text);
+    }
+
+    @FXML
+    public void handleCloseWindowButton(ActionEvent event) {
+        stage = (Stage) grid.getScene().getWindow();
+        stage.close();
+    }
+
+    public void disableUI() {
+        textfieldPrice.setDisable(true);
+        textfieldTransactionText.setDisable(true);
+        btnPay.setDisable(true);
+        btnX.setDisable(true);
+    }
+
+    public void enableUI() {
+        textfieldPrice.setDisable(false);
+        textfieldTransactionText.setDisable(false);
+        btnPay.setDisable(false);
+        btnX.setDisable(false);
     }
 
 }
