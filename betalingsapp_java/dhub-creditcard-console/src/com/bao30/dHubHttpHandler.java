@@ -9,7 +9,7 @@ import java.net.URL;
 
 public class dHubHttpHandler {
 
-    public static final String DHUB_SERVER = "http://127.0.0.1:8000/api/transaction/test";
+    public static final String DHUB_SERVER = "http://www.vrangum.com/dhub/api/transaction/test";
 
     public static void dHubTransactionPOST(String card_nr, Double pris, String varetekst) throws IOException {
         URL obj = new URL(DHUB_SERVER);
